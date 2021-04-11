@@ -46,7 +46,7 @@ void setup(){
   cells[12][48] = true;
   cells[13][48] = true;
   cells[14][48] = true;
-  //
+  //comandos para iniciar el juego en pausa
   if(pause == true){
     for(int i=0;i<proxGenCells.length;i++){
       for(int j=0;j<proxGenCells[i].length;j++){
