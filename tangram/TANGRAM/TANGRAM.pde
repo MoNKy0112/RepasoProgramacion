@@ -1,170 +1,207 @@
+Shape[] shapes;
+boolean drawProbl = false;
+int screenState=0, varScSt=0;
 
-void setup(){
-  size(800,800);
-  /*COLORES*/
-  
-  
-  /*FIGURAS*/
-  tri(0,color(0,0,180),100,200);
-  tri(1,color(0,180,0),100,200);
-  tri(2,color(180,0,0),100,100);
-  tri(3,color(180,180,0),50,100);
-  tri(4,color(180,0,180),50,100);
-  sqre(5,color(0,180,180),70,70);
-  paral(6,color(200,0,100),50,100,50);
-  
-  //FIGURA DE PRUEBA
-  //fig[7] = createShape(TRIANGLE,mouseX,mouseY,100,100,0,100);
-  
-  //frameRate(1);
-  
-  for(int i=0;i<fig.length;i++){
-    fig[i].setStroke(color(0,0,250)); 
+
+//menu juego=0,editor=1,libre=2,salir=3
+//int fr=0;
+
+void setup() {
+  color[] shapesColors= new color[7];
+  size(800, 800);
+  shapes = new Shape[7];
+  shapes[0] = new Triangle(0, 0, 100, 100, 200, 0);
+  shapes[1] = new Triangle(0, 0, 100, 100, 200, 0);
+  shapes[2] = new Triangle(0, 0, 100, 100, 0, 100);
+  shapes[3] = new Triangle(0, 0, 50, 50, 0, 100);
+  shapes[4] = new Triangle(0, 0, 50, 50, 0, 100);
+  shapes[5] = new Rect(70, 70);
+  shapes[6] = new Quad(0, 0, 100, 0, 150, -50, 50, -50);
+  for (Shape fig : shapes) {
+    fig.setScale(float(width/800), float(height/800));
+  }
+  for (int i=0; i<shapes.length; i++) {
+    color varCol=color(random(5, 255),random(5, 255), random(5, 255));
+    for(int j=0; j<i;j++){
+      if(varCol==shapesColors[j]){
+      varCol=color(random(5, 255),random(5, 255), random(5, 255));
+      j=-1;}
+    }
+    shapes[i].setColor(varCol);
+    shapesColors[i]=varCol;
   }
 }
 
-PShape [] fig = new PShape[7];
-PShape [] miniFig = new PShape[7];
-//PShape s;
-color [] col = new color[7];
-int [][] pos = new int[7][2];
-float grad=0;
-boolean fig_sel = true;
-int selected = 0;
-
-
-void draw(){
-  
-  background(255);
- 
-  //ATAJO VISUAL EN DESARROLLO
-  /*for(int i=0;i<fig.length;i++){
-    
-    if(selected == i){
-      fig[selected].setFill(color(100));
-    }else{
-      fig[i].setFill(color(15));
+void draw() {
+  background(255); 
+  fill(0);
+  text(varScSt+1, 50, 50);
+  switch(screenState) {
+  case 0: //MENU
+    {
+      menu();
+      break;
     }
-    shape(miniFig[i],10+(i*10),400);
-  }
-  miniFig[1].scale(0.99);*/
-  
-  //FIGURA DE PRUEBA
-  //shape(s,pos[7][0],pos[7][1]);
-  
-  //FIGURAS EN PANTALLA
-  for(int i=0;i<fig.length;i++){
-    if(fig_sel==true){
-      if(selected == i){
-        fig[selected].setFill(color(100));
-      }else{
-        fig[i].setFill(color(col[i]));
+  case 1: //JUGAR
+    {
+      if (drawProbl) printProb();
+      //dibuja las figuras
+      for (Shape fig : shapes) {
+        fig.drawFig();
       }
-    }else{
-      fig[i].setFill(color(col[i]));
+      //condicional para cuando el usuario ya gano
+      if (win() && drawProbl==true) {
+        //vuelve al menu
+        screenState=varScSt=0;
+        drawProbl=false;
+        //cambia de posicion las figuras aleatoriamente de nuevo
+        for (Shape fig : shapes) {
+          fig.setPos(random(100, width-100), random(100, height-100));
+        }
+      }
+      break;
     }
-    
-    shape(fig[i],pos[i][0],pos[i][1]);    
-  }
-  
-}
-
-void keyPressed(){
-  if(fig_sel == true){
-    if(key == 'q' || key=='Q'){
-      fig[selected].rotate(-PI/4);
-      return;
-      //rotar(fig [selected],PI/4);
+  case 2: //CREAR
+    {
+      //dibuja las figuras
+      for (Shape fig : shapes) {
+        fig.drawFig();
+      }
+      break;
     }
-    else if(key == 'e' || key=='E'){
-      fig[selected].rotate(PI/4);
-      return;
-      //rotar(fig [selected],-PI/4);
+  case 3:
+    {
+      exit();  
+      break;
     }
-  }
-  
-    switch(key){
-     case '1': 
-       fig_sel = true;
-       selected = 0;
-       break;
-     case '2':  
-       fig_sel = true;
-       selected = 1;
-       break;
-     case '3':  
-       fig_sel = true;
-       selected = 2;
-       break;
-     case '4':  
-       fig_sel = true;
-       selected = 3;
-       break;
-     case '5':  
-       fig_sel = true;
-       selected = 4;
-       break;
-     case '6': 
-       fig_sel = true;
-       selected = 5;
-       break;
-     case '7':  
-       fig_sel = true;
-       selected = 6;
-       break;         
-     default:        
-       fig_sel = false;
-       return;
-    }
-  
-    
-   
-}
-
-void mousePressed(){
-  if(fig_sel==true){
-    if(mouseButton==RIGHT){
-    //fig[selected].rotate((mouseX-pmouseX)*0.01+(mouseY-pmouseY)*0.01);
-    fig[selected].rotate(PI/4);  
-  }
+  default:
+    println("Error");
+    break;
   }
 }
 
-void mouseDragged(){
-  
-  if(fig_sel==true){
-    if(mouseButton==LEFT){
-      pos[selected][0]+=mouseX-pmouseX;
-      pos[selected][1]+=mouseY-pmouseY;
+void mouseClicked() {
+  //seleccion de figura
+  loadPixels();
+  for (Shape fig : shapes)
+    fig.selec(mouseX, mouseY);
+}
+
+void mouseDragged() {
+  //movimiento por mouse
+  for (Shape fig : shapes)
+    if (mouseButton==LEFT && fig.getSelected())
+      fig.move(mouseX-pmouseX, mouseY-pmouseY);
+}
+
+void mouseReleased() {
+  //ajuste de posicion
+  for (Shape fig : shapes)
+    fig.adjust(5);
+}
+
+void keyPressed() {
+
+  //movimiento de opciones del menu
+  if (screenState==0) {     
+    if (keyCode == DOWN) varScSt++;
+    else if (keyCode == UP) varScSt--;
+
+    if (varScSt>2)varScSt=0;
+    if (varScSt<0)varScSt=2;
+
+    if (key==ENTER) {
+      screenState=varScSt+1;
+    }
+  } else {
+    if (key == BACKSPACE) {
+      screenState=varScSt=0;
     }
   }
-  
-  if(mouseButton==CENTER){
-    for(int i=0;i<fig.length;i++){
-      pos[i][0]+=mouseX-pmouseX;
-      pos[i][1]+=mouseY-pmouseY;
+  //movimientos por flechas
+  if (screenState!=0) {
+    for (Shape fig : shapes) {
+      fig.scal(key, 0.1);
+      if (fig.getSelected()) {
+        //fig.modif();
+        fig.rotat(key, PI/4);
+        switch(keyCode) {
+        case LEFT:
+          fig.move(-5, 0);
+          break;
+        case RIGHT:
+          fig.move(5, 0);
+          break;
+        case DOWN:
+          fig.move(0, 5);
+          break;
+        case UP:
+          fig.move(0, -5);
+          break;
+        }
+      }
     }
   }
+  //guardar problema (solo en modo crear)
+  if ((key=='g' || key=='G') && screenState==2) {
+    saveProb();
+  }
+  //dibujar problema (solo en modo jugar)
+  if ((key=='t' || key=='T') && screenState==1) {
+    drawProbl = drawProbl ? false: true;
+  }
 }
+//FUNCION guardar problema
+void saveProb() {
+  background(255);
 
-void tri(int n_fig,color clr,int h,int base){
-  
-  col [n_fig] = clr;
-  fig [n_fig] = createShape(TRIANGLE,0,0,h,h,0,base);
-  
+  for (Shape fig : shapes) {
+    fig.drawFig();
+  }
+  byte[] a ={};
+  loadPixels();
+  a = byte(pixels);
+  save("level_1.txt");
+  println("guardado");
+  //cambia de posicion las figuras aleatoriamente de nuevo
+  for (Shape fig : shapes) {
+    fig.setPos(random(100, width-100), random(100, height-100));
+  }
+  //vuelve al menu
+  screenState=varScSt=0;
 }
-
-void sqre(int n_fig,color clr,int alto,int ancho){
-
-  col [n_fig] = clr;
-  fig [n_fig] = createShape(QUAD,0,0,ancho,0,ancho,alto,0,alto);
-  
-  
+//FUNCION dibujar problema
+void printProb() {
+  byte[] a = loadBytes("level_1.txt");
+  loadPixels();
+  for (int i=0; i<a.length; i++) {
+    pixels[i] = color(a[i]);
+  }
+  for (int i=0; i<a.length; i++) {
+    if (pixels[i] != color(255)) pixels[i] = color(0);
+  }
+  updatePixels();
+  //println("pixeles cargados");
 }
-
-void paral(int n_fig,color clr,int alto,int ancho,int dif){
-
-  col [n_fig] = clr;
-  fig [n_fig] = createShape(QUAD,dif,0,dif+ancho,0,ancho,alto,0,alto);
-  
+//FUNCION evaluacion de solucion
+boolean win() {
+  loadPixels();
+  for (int i=0; i<width*height; i++) {
+    if (pixels[i] == color(0)) return false;
+  }
+  println("completado");
+  return true;
+}
+//FUNCION visual menu
+void menu() {
+  String[] menu = {"1 - JUGAR", "2 - CREAR", "3 - SALIR"};
+  textAlign(CENTER);
+  textSize(20);
+  for (int i=0; i<menu.length; i++) {
+    fill(0);
+    if (varScSt==i) {
+      fill(200, 0, 0);
+    }
+    text(menu[i], width/2, (height/2)-100+(i*100));
+  }
 }
