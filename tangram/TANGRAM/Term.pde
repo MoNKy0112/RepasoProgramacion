@@ -2,17 +2,17 @@ class Term extends Shape {
   String content;
 
   Term() {
-    this(3, 8);
+    this(3, 8, 8);
   }
 
-  Term(String content, float scale) {
+  Term(String content, float scaleX,float scaleY) {
     setcontent(content);
-    setScale(scale);
+    setScale(scaleX,scaleY);
   }
 
-  Term(int content, float scale) {
+  Term(int content, float scaleX,float scaleY) {
     setcontent(content);
-    setScale(scale);
+    setScale(scaleX,scaleY);
   }
 
   @Override

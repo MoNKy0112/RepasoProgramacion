@@ -1,6 +1,6 @@
 abstract class Shape {
   color col, strokeCol;
-  float angle, scale;
+  float angle, scaleX, scaleY;
   float[] pos = new float[2];
   boolean selected = false;
 
@@ -10,15 +10,15 @@ abstract class Shape {
     //color(random(5, 255), random(5, 255), random(5, 255)));
     setPos(random(100, width-100), random(100, height-100));
     setAngle(0);
-    setScale(1);
+    setScale(1,1);
     setColor(color(random(5, 255), random(5, 255), random(5, 255)));
     setStrokeColor(color(random(5, 255), random(5, 255), random(5, 255)));
   }
 
-  Shape(float x, float y, float ang, float sc, color col, color strCol) {
+  Shape(float x, float y, float angle, float scaleX,float scaleY, color col, color strCol) {
     setPos(x, y);
-    setAngle(ang);
-    setScale(sc);
+    setAngle(angle);
+    setScale(scaleX,scaleY);
     setColor(col);
     setColor(strCol);
   }
@@ -31,7 +31,7 @@ abstract class Shape {
     stroke(this.strokeCol);
     translate(this.pos[0], this.pos[1]);
     rotate(this.angle);
-    scale(this.scale, this.scale);
+    scale(this.scaleX, this.scaleY);
     aspect();
     pop();
   }
@@ -89,10 +89,12 @@ abstract class Shape {
   //FUNCION escalar figuras (letra presionada,tamaño de escala)
   void scal(char k, float size) {
     if (k=='+') {
-      this.scale+=size;
+      this.scaleX+=size;
+      this.scaleY+=size;
     }
     if (k=='-') {
-      this.scale-=size;
+      this.scaleX-=size;
+      this.scaleY-=size;
     }
   }
   //FUNCION reajuste de posición(tamaño de ajuste)
@@ -114,8 +116,9 @@ abstract class Shape {
   void setAngle(float a) {
     this.angle = a;
   }
-  void setScale(float s) {
-    this.scale = s;
+  void setScale(float x,float y) {
+    this.scaleX = x;
+    this.scaleY = y;
   }
   void setColor(color c) {
     this.col = c;
@@ -133,8 +136,11 @@ abstract class Shape {
   float getAngle() {
     return this.angle;
   }
-  float getScale() {
-    return this.scale;
+  float getScaleX() {
+    return this.scaleX;
+  }
+  float getScaleY() {
+    return this.scaleY;
   }
   color getColor() {
     return this.col;
