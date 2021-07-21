@@ -7,9 +7,11 @@ int screenState=0, varScSt=0;
 //int fr=0;
 
 void setup() {
-  color[] shapesColors= new color[7];
   size(800, 800);
   shapes = new Shape[7];
+  /*for (int i=0; i<figuras.length-1; i++) {
+   figuras[i] = i < 4 ? new  CUADRADO() : new TRIANGULO();
+   }*/
   shapes[0] = new Triangle(0, 0, 100, 100, 200, 0);
   shapes[1] = new Triangle(0, 0, 100, 100, 200, 0);
   shapes[2] = new Triangle(0, 0, 100, 100, 0, 100);
@@ -17,19 +19,9 @@ void setup() {
   shapes[4] = new Triangle(0, 0, 50, 50, 0, 100);
   shapes[5] = new Rect(70, 70);
   shapes[6] = new Quad(0, 0, 100, 0, 150, -50, 50, -50);
-  for (Shape fig : shapes) {
-    fig.setScale(float(width/800), float(height/800));
-  }
-  for (int i=0; i<shapes.length; i++) {
-    color varCol=color(random(5, 255),random(5, 255), random(5, 255));
-    for(int j=0; j<i;j++){
-      if(varCol==shapesColors[j]){
-      varCol=color(random(5, 255),random(5, 255), random(5, 255));
-      j=-1;}
-    }
-    shapes[i].setColor(varCol);
-    shapesColors[i]=varCol;
-  }
+  /*for(int i=0;i<figuras.length;i++){
+   figuras[i].setColor(color(0));
+   }*/
 }
 
 void draw() {
@@ -90,7 +82,7 @@ void mouseClicked() {
 void mouseDragged() {
   //movimiento por mouse
   for (Shape fig : shapes)
-    if (mouseButton==LEFT && fig.getSelected())
+    if(mouseButton==LEFT && fig.getSelected())
       fig.move(mouseX-pmouseX, mouseY-pmouseY);
 }
 
@@ -121,30 +113,22 @@ void keyPressed() {
   //movimientos por flechas
   if (screenState!=0) {
     for (Shape fig : shapes) {
-      fig.scal(key, 0.1);
+      fig.scal(key,0.1);
       if (fig.getSelected()) {
         //fig.modif();
-        fig.rotat(key, PI/4);
-        switch(keyCode) {
-        case LEFT:
-          fig.move(-5, 0);
-          break;
-        case RIGHT:
-          fig.move(5, 0);
-          break;
-        case DOWN:
-          fig.move(0, 5);
-          break;
-        case UP:
-          fig.move(0, -5);
-          break;
+        fig.rotat(key,PI/4);
+        switch(keyCode){
+          case LEFT:fig.move(-5,0);break;
+          case RIGHT:fig.move(5,0);break;
+          case DOWN:fig.move(0,5);break;
+          case UP:fig.move(0,-5);break;
         }
       }
     }
   }
   //guardar problema (solo en modo crear)
   if ((key=='g' || key=='G') && screenState==2) {
-    saveProb();
+    guardarProb();
   }
   //dibujar problema (solo en modo jugar)
   if ((key=='t' || key=='T') && screenState==1) {
@@ -152,7 +136,7 @@ void keyPressed() {
   }
 }
 //FUNCION guardar problema
-void saveProb() {
+void guardarProb() {
   background(255);
 
   for (Shape fig : shapes) {
@@ -161,7 +145,7 @@ void saveProb() {
   byte[] a ={};
   loadPixels();
   a = byte(pixels);
-  save("level_1.txt");
+  saveBytes("level_1.txt", a);
   println("guardado");
   //cambia de posicion las figuras aleatoriamente de nuevo
   for (Shape fig : shapes) {

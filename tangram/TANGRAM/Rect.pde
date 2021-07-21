@@ -17,7 +17,6 @@ class Rect extends Shape {
     rect(0, 0, this.arisBs, this.arisHg);
   }
 
-  //metodo solo funcional en cuadrilateros 
   /*boolean contains(int x, int y) {
     if (pos[0]<=x && x<=pos[0]+arisHg && pos[1]<=y && y<=pos[1]+arisBs) {
       return true;
