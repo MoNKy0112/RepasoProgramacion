@@ -17,7 +17,7 @@ class Term extends Shape {
 
   @Override
   void aspect() {
-    
+    textAlign(CENTER);
     noStroke();
     text(content, 0, 0);
   }

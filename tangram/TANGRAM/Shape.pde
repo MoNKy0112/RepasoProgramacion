@@ -8,7 +8,7 @@ abstract class Shape {
     //this(random(width), random(height),
     //random(PI), random(1.5),
     //color(random(5, 255), random(5, 255), random(5, 255)));
-    setPos(random(100, width-100), random(100, height-100));
+    setPosition(random(100, width-100), random(100, height-100));
     setAngle(0);
     setScale(1,1);
     setColor(color(random(5, 255), random(5, 255), random(5, 255)));
@@ -16,7 +16,7 @@ abstract class Shape {
   }
 
   Shape(float x, float y, float angle, float scaleX,float scaleY, color col, color strCol) {
-    setPos(x, y);
+    setPosition(x, y);
     setAngle(angle);
     setScale(scaleX,scaleY);
     setColor(col);
@@ -66,7 +66,7 @@ abstract class Shape {
   }*/
   //FUNCION seleccion de objeto "CONTAINS"(coordenada X, coordenada Y)
   void selec(int X, int Y) {
-    if (color(pixels[Y*width+X])==color(col)) {
+    if (get(X,Y)==col) {
       selected = true;
     } else {
       selected = false;
@@ -109,7 +109,7 @@ abstract class Shape {
    }*/
 
   //setters
-  void setPos(float x, float y) {
+  void setPosition(float x, float y) {
     this.pos[0] = x;
     this.pos[1] = y;
   }
