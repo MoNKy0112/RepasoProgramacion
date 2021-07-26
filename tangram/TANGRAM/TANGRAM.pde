@@ -10,6 +10,16 @@ PImage problem;
 //menu juego=0,editor=1,libre=2,salir=3
 //int fr=0;
 
+//----CONTROLES-----//
+/*
+MENU PRINCIPAL: FLECHAS ARRIBA y ABAJO(MOVER), ENTER(SELECCIONAR MODO) 
+MENU NIVELES: FLECHAS IZQ. y DER.(MOVER) , BARRA ESP.(SELECCIONAR NIVEL)
+JUEGO:CLICK (SELECCIONAR FIGURA), ARRASTRAR MOUSE ó FLECHAS (MOVER),"Q" y "E" (GIRAR)
+"+" y "-" (CAMBIAR ESCALA DE FIGURAS), "A" (AJUSTE MANUAL), SHIFT (ACTIVA-DESACTIVA AJUSTE AUTOMATICO)
+"T" (MOSTRAR-ESCONDER PROBLEMA), "G" (GUARDAR PROBLEMA) solo en modo crear
+BACKSPACE (VOLVER AL MENU PRINCIPAL)
+*/
+
 void setup() {
 
   size(800, 800);
@@ -50,7 +60,7 @@ void setup() {
 void draw() {
   background(255); 
   fill(0);
-  text(varScSt+1, 50, 50);
+  //text(varScSt+1, 50, 50);
   //carga el nivel en imagen
   if (level!=0 && !saveProblem) {
     try {
@@ -89,6 +99,7 @@ void draw() {
       //condicional para cuando el usuario ya gano
       if (win() && drawProbl==true) {
         //vuelve al menu
+        println("complete");
         screenState=varScSt=0;
         drawProbl=false;
         //cambia de posicion las figuras aleatoriamente de nuevo
@@ -258,7 +269,7 @@ boolean win() {
   }
   if (a>200)return false;
   else {
-    println("completado");
+    //println("completado");
     return true;
   }
 }
